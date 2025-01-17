@@ -1,0 +1,127 @@
+function createRanodmNumber(){
+    const randomNumber=parseInt(Math.random()*10+1);
+return randomNumber;
+
+}
+let randomNumer=createRanodmNumber()
+const submit=document.querySelector('#subt');
+const userInput=document.querySelector('#guessField');
+const guessSlot=document.querySelector('.guesses');
+const remaining=document.querySelector('.lastResult');
+const lowOrHigh=document.querySelector('.lowOrHi');
+const startOver=document.querySelector('.resultParas');
+
+
+const div=document.createElement('div');
+
+let prevGuess=[]
+let numGuesses=0;
+
+let playGame=true;
+
+
+
+if(playGame){
+    submit.addEventListener('click',function(e){
+        e.preventDefault();
+       const guess= parseInt(userInput.value);
+       console.log(guess);
+
+       validateGuess(guess);
+
+    })
+}
+
+function validateGuess(guess){
+    // only numbers will be accepted
+if (isNaN(guess)){
+    alert('please enter a valid number');
+
+}
+else if(guess<1 || guess>100){
+    alert('please enter a 100 > number >1 ');
+}
+else{
+    prevGuess.push(guess);
+    if (numGuesses>=10){
+        DisplayGuess(guess);
+        displayMsg(`Game over<br> The correct  number was ${randomNumer}`);
+        endGame();
+
+    }
+    else{
+        DisplayGuess(guess);
+        checkGuess(guess);
+
+    }
+}
+}
+
+function checkGuess(guess){
+    //check if the guessed number is matched with random nuber or not or higher than or lower than that
+if (guess>randomNumer){
+    displayMsg("Your guessed number is too high");
+
+}
+else if(guess<randomNumer){
+    displayMsg("Your guessed number is too low");
+
+}
+else{
+    displayMsg("congratulations! you guessed it right ");
+
+}
+}
+
+function displayMsg(message){
+    //
+    lowOrHigh.innerHTML=`<h2>${message}</2>`;
+
+
+
+}
+
+function DisplayGuess(guess){
+    //  this is also a clean up function 
+    userInput.value='';
+    guessSlot.innerHTML+=`${guess} `;
+    numGuesses++;
+
+
+    remaining.innerHTML=`${11-numGuesses}`;
+
+
+}
+
+function newGame ()
+{
+
+}
+
+function endGame(){
+    // cleaning values from variables 
+userInput.value=''
+userInput.setAttribute('disabled','');
+div.classList.add('button');
+div.innerHTML=`<h2 id=newGame>Start new game  </h2>`;
+startOver.appendChild(div);
+playGame=false;
+
+newGame();
+newGameButton=document.querySelector('#newGame');
+newGameButton.addEventListener('click',function (e){
+randomNumber=createRanodmNumber();
+prevGuess=[];
+numGuesses=1;
+guessSlot.innerHTML='';
+remaining.innerHTML=`${10-numGuesses}`;
+userInput.removeAttribute('disabled');
+startOver.removeChild(div);
+
+playGame=true;
+
+})
+
+}
+
+
